@@ -4,12 +4,14 @@
 // @version      0.1
 // @description  try to take over the world!
 // @author       You
-// @match        https://www.monogatariscansmtl.com/*
+// @match        https://www.monogatariscansmtl.com/post/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=monogatariscansmtl.com
 // @grant        none
 // ==/UserScript==
 
 (function() {
+    'use strict';
+
     // Function to get the current page number
     function currentPageNum() {
         // Get the current page's URL
@@ -28,13 +30,20 @@
         return 0; // Default to page 0 if no number is found
     }
 
-    // Create an anchor element
+    // Function to simulate a click on an element
+    function simulateButtonClick(element) {
+        if (element) {
+            element.click();
+        }
+    }
+
+    // Create anchor elements for "Next" and "Prev" links
     const nextElement = document.createElement("a");
     const prevElement = document.createElement("a");
 
-    // Add text or content to the anchor element (optional)
-    nextElement.textContent = "Next"; // Replace with your desired text
-    prevElement.textContent = "Prev"; // Replace with your desired text
+    // Add text to the anchor elements
+    nextElement.textContent = "Next";
+    prevElement.textContent = "Prev";
 
     // Apply CSS styles to the anchor elements
     nextElement.style.position = "fixed";
@@ -51,7 +60,7 @@
     prevElement.style.fontWeight = "bold";
     prevElement.style.fontSize = "30px";
 
-       // Add event listeners to the anchor elements
+    // Add event listeners to the anchor elements
     nextElement.addEventListener("click", function () {
         // Get the current page number
         const currentPage = currentPageNum();
@@ -68,7 +77,17 @@
         prevElement.href = "https://www.monogatariscansmtl.com/post/martial-peak-" + (currentPage - 1);
     });
 
-    // Add the anchor elements to the document (e.g., a specific container or the body)
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowLeft') {
+            // Bind 'ArrowLeft' to the previous page button.
+            simulateButtonClick(prevElement);
+        } else if (event.key === 'ArrowRight') {
+            // Bind 'ArrowRight' to the next page button.
+            simulateButtonClick(nextElement);
+        }
+    });
+
+    // Add the anchor elements to the document
     document.body.appendChild(nextElement);
     document.body.appendChild(prevElement);
 })();
