@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MartialPeak Monogatariscansmtl
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       You
 // @match        https://www.monogatariscansmtl.com/post/*
@@ -18,23 +18,40 @@
         const currentPageUrl = window.location.href;
 
         // Define a regular expression to match the number at the end of the URL
-        const regex = /(\d+)$/;
-
-        // Use the regular expression to extract the number
+        const regex = /martial-peak-(\d+)/i;
         const match = currentPageUrl.match(regex);
 
         if (match) {
-            const pageNum = parseInt(match[1], 10);
-            return pageNum;
+            // Use parseInt to convert the matched string to an integer
+            const number = parseInt(match[1], 10); // Use base 10 for parsing
+            if (!isNaN(number)) {
+                return number;
+            }
         }
-        return 0; // Default to page 0 if no number is found
-    }
 
-    // Function to simulate a click on an element
-    function simulateButtonClick(element) {
-        if (element) {
-            element.click();
-        }
+        // Return -1 for error or no match
+        return -1;
+    }
+    function checkOptional() {
+        // Get the current page's URL
+        const currentPageUrl = window.location.href;
+
+
+// Adjusted regular expression to capture chapter number and optional "-1"
+const regex = /martial-peak-(\d+)(?:-(\d+))?/i;
+const match = currentPageUrl.match(regex);
+
+if (match) {
+    // Extract chapter number and optional "-1"
+    const chapterNumber = match[1];
+    const optionalSuffix = match[2];
+
+    if (optionalSuffix) {
+        return true;
+    } else {
+        return false;
+    }
+}
     }
 
     // Create anchor elements for "Next" and "Prev" links
@@ -60,30 +77,77 @@
     prevElement.style.fontWeight = "bold";
     prevElement.style.fontSize = "30px";
 
+    // Get the current page number
+    const currentPage = currentPageNum();
+
+    // Calculate the next and prev page numbers
+    const nextPage = currentPage + 1;
+    const prevPage = currentPage - 1;
+
+    // Create dynamic chapter links based on the page numbers
+    const baseChapterUrl = "https://www.monogatariscansmtl.com/post/martial-peak-";
+
+    // Handle exceptions for specific chapters
+    let nextLink, prevLink;
+
+    // Example of handling exceptions:
+    if (currentPage === 5748) {
+        nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5849";
+        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5747";
+    } else if (currentPage === 5750) {
+        nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5751";
+        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5849";
+    } else if (currentPage === 5848) {
+        nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5849-1";
+        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5847";
+    } else if (currentPage === 5849) {
+        if(checkOptional())
+        {
+            nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5850";
+            prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5848";
+        }
+        else
+        {
+            nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5750";
+        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5748";
+        }
+    }else if(currentPage === 5850)
+    {
+        nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5851";
+        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5849-1";
+    }
+    else {
+        // Regular pattern for other chapters
+        nextLink = baseChapterUrl + nextPage;
+        prevLink = baseChapterUrl + prevPage;
+    }
+
     // Add event listeners to the anchor elements
     nextElement.addEventListener("click", function () {
-        // Get the current page number
-        const currentPage = currentPageNum();
-
         // Update the href attribute of the "Next" link
-        nextElement.href = "https://www.monogatariscansmtl.com/post/martial-peak-" + (currentPage + 1);
+        if (nextLink) {
+            window.location.href = nextLink;
+        }
     });
 
     prevElement.addEventListener("click", function () {
-        // Get the current page number
-        const currentPage = currentPageNum();
-
         // Update the href attribute of the "Prev" link
-        prevElement.href = "https://www.monogatariscansmtl.com/post/martial-peak-" + (currentPage - 1);
+        if (prevLink) {
+            window.location.href = prevLink;
+        }
     });
 
     document.addEventListener('keydown', function(event) {
         if (event.key === 'ArrowLeft') {
             // Bind 'ArrowLeft' to the previous page button.
-            simulateButtonClick(prevElement);
+            if (prevLink) {
+                window.location.href = prevLink;
+            }
         } else if (event.key === 'ArrowRight') {
             // Bind 'ArrowRight' to the next page button.
-            simulateButtonClick(nextElement);
+            if (nextLink) {
+                window.location.href = nextLink;
+            }
         }
     });
 
@@ -91,3 +155,4 @@
     document.body.appendChild(nextElement);
     document.body.appendChild(prevElement);
 })();
+
