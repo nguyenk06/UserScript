@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MartialPeak Monogatariscansmtl
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Monogatariscansmtl Page turner
 // @author       You
 // @match        https://www.monogatariscansmtl.com/post/*
@@ -12,14 +12,23 @@
 (function() {
     'use strict';
     
-     const scriptUrl = 'https://github.com/nguyenk06/UserScript/raw/main/MartialPeak%20Monogatariscansmtl.user.js';
+    // Function to perform an HTTP GET request using XMLHttpRequest
+    function fetchScript(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                callback(xhr.responseText);
+            }
+        };
+        xhr.send();
+    }
 
-    GM_xmlhttpRequest({
-        method: 'GET',
-        url: scriptUrl,
-        onload: function (response) {
-            const remoteScript = response.responseText;
+    // Check for script updates
+    function checkForUpdate() {
+        const scriptUrl = 'https://github.com/nguyenk06/UserScript/raw/main/MartialPeak%20Monogatariscansmtl.user.js';
 
+        fetchScript(scriptUrl, function(remoteScript) {
             // Extract the version from the remote script
             const remoteVersion = remoteScript.match(/@version\s+([0-9.]+)/i)[1];
 
@@ -29,8 +38,8 @@
                     window.location.href = scriptUrl;
                 }
             }
-        },
-    });
+        });
+    }
 
     // Function to get the current page number
     function currentPageNum() {
