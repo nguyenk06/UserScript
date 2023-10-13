@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MartialPeak Monogatariscansmtl
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Monogatariscansmtl Page turner
 // @author       You
 // @match        https://www.monogatariscansmtl.com/post/*
@@ -80,16 +80,43 @@ if (match) {
     } else {
         return false;
     }
-}
     }
+   }
+
+    // Function to retrieve the latest chapter from local storage
+function getLatestChapter() {
+  return localStorage.getItem('latestChapter');
+}
+
+// Function to update the latest chapter in local storage
+function updateLatestChapter() {
+    let latestChapter = getLatestChapter();
+    let chapterNumber =  currentPageNum();
+    if(latestChapter !== null)
+    {
+        if(latestChapter <chapterNumber)
+        {
+            localStorage.setItem('latestChapter', chapterNumber);
+        }
+    }
+    else
+    {
+        localStorage.setItem('latestChapter', chapterNumber);
+    }
+}
+
+
+    updateLatestChapter();
 
     // Create anchor elements for "Next" and "Prev" links
     const nextElement = document.createElement("a");
     const prevElement = document.createElement("a");
+    const latestElement = document.createElement("a");
 
     // Add text to the anchor elements
     nextElement.textContent = "Next";
     prevElement.textContent = "Prev";
+    latestElement.textContent = "Last Read " +getLatestChapter() ;
 
     // Apply CSS styles to the anchor elements
     nextElement.style.position = "fixed";
@@ -105,6 +132,13 @@ if (match) {
     prevElement.style.color = "white";
     prevElement.style.fontWeight = "bold";
     prevElement.style.fontSize = "30px";
+
+    latestElement.style.position = "fixed";
+    latestElement.style.top = "20px";
+    latestElement.style.left = "200px";
+    latestElement.style.color = "white";
+    latestElement.style.fontWeight = "bold";
+    latestElement.style.fontSize = "30px";
 
     // Get the current page number
     const currentPage = currentPageNum();
@@ -165,6 +199,12 @@ if (match) {
             window.location.href = prevLink;
         }
     });
+    latestElement.addEventListener("click", function () {
+        // Update the href attribute of the "Prev" link
+        if (getLatestChapter()) {
+            window.location.href = baseChapterUrl+getLatestChapter();
+        }
+    });
 
     document.addEventListener('keydown', function(event) {
         if (event.key === 'ArrowLeft') {
@@ -183,5 +223,11 @@ if (match) {
     // Add the anchor elements to the document
     document.body.appendChild(nextElement);
     document.body.appendChild(prevElement);
+    // Example of how to use these functions
+const latestChapter = getLatestChapter();
+if (latestChapter !== null) {
+
+   document.body.appendChild(latestElement);
+}
 })();
 
