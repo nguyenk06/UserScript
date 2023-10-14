@@ -180,8 +180,7 @@ function updateLatestChapter() {
     }else if(currentPage === 5850)
     {
         nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5851";
-        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5849-1";
-    }
+        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5849-1";    
 	}else if(currentPage === 5884)
     {
 		if(checkOptional())
