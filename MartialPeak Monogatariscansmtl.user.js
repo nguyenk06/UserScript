@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MartialPeak Monogatariscansmtl
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.35
 // @description  Monogatariscansmtl Page turner
 // @author       You
 // @match        https://www.monogatariscansmtl.com/post/*
@@ -194,7 +194,11 @@ function updateLatestChapter() {
         prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5883";
         }
         
-    }
+    }else if(currentPage == 5886)
+	{
+		nextLink = "https://www.monogatariscansmtl.com/post/martial-peak-5887";
+        prevLink = "https://www.monogatariscansmtl.com/post/martial-peak-5884-1";
+	}
     else {
         // Regular pattern for other chapters
         nextLink = baseChapterUrl + nextPage;
