@@ -40,6 +40,9 @@
             }
         });
     }
+	
+	// Run checkupdate
+	checkForUpdate();
 
     // Function to get the current page number
     function currentPageNum() {
