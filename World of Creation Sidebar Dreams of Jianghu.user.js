@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      1.06
+// @version      2
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -172,7 +172,7 @@ const toggleSidebarBtn = document.createElement('button');
 toggleSidebarBtn.textContent = 'Toggle Sidebar';
 toggleSidebarBtn.style.position = 'fixed';
 toggleSidebarBtn.style.top = '20px'; // Adjust the top position
-toggleSidebarBtn.style.left = '20px'; // Adjust the left position
+toggleSidebarBtn.style.left = '200px'; // Adjust the left position
 
 // Attach toggle functionality to the button
 toggleSidebarBtn.addEventListener('click', toggleSidebar);
