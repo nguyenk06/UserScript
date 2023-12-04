@@ -143,9 +143,9 @@ function extractAndStoreLinks() {
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebarContainer');
         if (sidebar.style.display === 'none' || sidebar.style.display === '') {
-            sidebar.style.display = 'block';
+            sidebar.style.display = 'block !important';
         } else {
-            sidebar.style.display = 'none';
+            sidebar.style.display = 'none !important';
         }
     }
 
