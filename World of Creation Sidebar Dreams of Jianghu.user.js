@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      1.01
+// @version      1.02
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
