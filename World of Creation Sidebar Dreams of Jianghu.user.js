@@ -120,13 +120,9 @@ function extractAndStoreLinks() {
             localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
         }
     }
- function toggleSidebar() {
+	 function toggleSidebar() {
         const sidebar = document.getElementById('sidebarContainer');
-        if (sidebar.style.display === 'none' || sidebar.style.display === '') {
-            sidebar.style.display = 'block';
-        } else {
-            sidebar.style.display = 'none';
-        }
+        sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
     }
 
     const url = window.location.href;
@@ -147,15 +143,13 @@ function extractAndStoreLinks() {
         };
     }
 
-    // Add button to toggle sidebar visibility on mobile
     const toggleSidebarBtn = document.createElement('button');
     toggleSidebarBtn.textContent = 'Toggle Sidebar';
     toggleSidebarBtn.id = 'toggleSidebarBtn';
-    toggleSidebarBtn.style.display = 'none'; // Hide button by default
+    toggleSidebarBtn.style.display = 'none';
 
     toggleSidebarBtn.addEventListener('click', toggleSidebar);
 
-    // Append the button to the body
     document.body.appendChild(toggleSidebarBtn);
 
     GM_addStyle(`
