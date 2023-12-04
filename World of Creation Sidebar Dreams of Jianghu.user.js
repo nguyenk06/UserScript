@@ -10,10 +10,8 @@
 
 (function() {
     'use strict';
-
-  
-    // Function to perform an HTTP GET request using XMLHttpRequest
-   function fetchScript(url, callback, errorCallback) {
+// Function to perform an HTTP GET request using XMLHttpRequest
+function fetchScript(url, callback, errorCallback) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function() {
@@ -64,6 +62,7 @@ function checkForUpdate() {
         }
     );
 }
+
 	
 	// Run checkupdate
 	checkForUpdate();
