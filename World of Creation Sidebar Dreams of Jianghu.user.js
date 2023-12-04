@@ -143,9 +143,9 @@ function extractAndStoreLinks() {
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebarContainer');
         if (sidebar.style.display === 'none' || sidebar.style.display === '') {
-            sidebar.style.display = 'block !important';
+            sidebar.style.display = 'block';
         } else {
-            sidebar.style.display = 'none !important';
+            sidebar.style.display = 'none';
         }
     }
 
@@ -191,7 +191,7 @@ document.body.insertBefore(toggleSidebarBtn, document.body.firstChild);
         /* Media query for mobile devices */
         @media only screen and (max-width: 768px) {
             #sidebarContainer {
-                display: none !important; /* Hide the sidebar on smaller screens */
+                display: none; /* Hide the sidebar on smaller screens */
             }
 
             /* Styles for the button on mobile */
