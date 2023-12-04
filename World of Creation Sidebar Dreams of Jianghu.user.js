@@ -24,27 +24,25 @@
         xhr.send();
     }
 
-// Check for script updates
-function checkForUpdate() {
-    const scriptUrl = 'https://github.com/nguyenk06/UserScript/raw/main/World%20of%20Creation%20Sidebar%20Dreams%20of%20Jianghu.user.js';
+    // Check for script updates
+    function checkForUpdate() {
+        const scriptUrl = 'https://github.com/nguyenk06/UserScript/raw/main/World%20of%20Creation%20Sidebar%20Dreams%20of%20Jianghu.user.js';
 
-    fetchScript(scriptUrl, function(remoteScript) {
-        const match = remoteScript.match(/@version\s+(.+)/);
-        if (match) {
-            const remoteVersion = match[1];
-            if (remoteVersion !== GM_info.script.version) {
+        fetchScript(scriptUrl, function(remoteScript) {
+            // Extract the version from the remote script
+            const remoteVersion = remoteScript.match(/@version\s+([0-9.]+)/i)[1];
+
+            if (remoteVersion && remoteVersion !== GM_info.script.version) {
                 if (confirm('A new version is available. Update now?')) {
+                    // Redirect to the update URL
                     window.location.href = scriptUrl;
                 }
             }
-        }
-    });
-}
-
+        });
+    }
 	
 	// Run checkupdate
 	checkForUpdate();
-
 
 function extractAndStoreLinks() {
     const storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks')) || [];
