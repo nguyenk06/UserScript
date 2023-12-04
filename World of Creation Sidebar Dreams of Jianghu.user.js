@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      1.04
+// @version      1.05
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -168,20 +168,19 @@ function extractAndStoreLinks() {
             }
         };
     }
+     
+    // Create a toggle button
+const toggleSidebarBtn = document.createElement('button');
+toggleSidebarBtn.textContent = 'Toggle Sidebar';
+toggleSidebarBtn.style.position = 'fixed';
+toggleSidebarBtn.style.top = '20px'; // Adjust the top position
+toggleSidebarBtn.style.left = '20px'; // Adjust the left position
 
-     // Create a toggle button
-    const toggleSidebarBtn = document.createElement('button');
-    toggleSidebarBtn.textContent = 'Toggle Sidebar';
-    toggleSidebarBtn.style.position = 'fixed';
-    toggleSidebarBtn.style.top = '20px'; // Adjust position as needed
-    toggleSidebarBtn.style.left = '20px'; // Adjust position as needed
+// Attach toggle functionality to the button
+toggleSidebarBtn.addEventListener('click', toggleSidebar);
 
-    // Attach toggle functionality to the button
-    toggleSidebarBtn.addEventListener('click', toggleSidebar);
-
-    // Insert the button before the element with ID 'cb_p6_patreon_button'
-    const patreonButton = document.getElementById('cb_p6_patreon_button');
-    patreonButton.parentNode.insertBefore(toggleSidebarBtn, patreonButton);
+// Insert the button at the top of the body
+document.body.insertBefore(toggleSidebarBtn, document.body.firstChild);
 
     // Add styles
     GM_addStyle(`
