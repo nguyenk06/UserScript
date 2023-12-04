@@ -8,8 +8,6 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 
-(function() {
-    'use strict';
 // Function to perform an HTTP GET request using XMLHttpRequest
 function fetchScript(url, callback, errorCallback) {
     var xhr = new XMLHttpRequest();
@@ -63,9 +61,11 @@ function checkForUpdate() {
     );
 }
 
-	
-	// Run checkupdate
-	checkForUpdate();
+(function() {
+    'use strict';
+
+  // Run checkupdate
+    checkForUpdate();
 
 function extractAndStoreLinks() {
     const storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks')) || [];
@@ -142,7 +142,8 @@ function extractAndStoreLinks() {
             localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
         }
     }
-	 function toggleSidebar() {
+	  // Function to perform toggle sidebar
+    function toggleSidebar() {
         const sidebar = document.getElementById('sidebarContainer');
         if (sidebar.style.display === 'none' || sidebar.style.display === '') {
             sidebar.style.display = 'block';
@@ -169,7 +170,7 @@ function extractAndStoreLinks() {
         };
     }
 
-   // Create a toggle button
+     // Create a toggle button
     const toggleSidebarBtn = document.createElement('button');
     toggleSidebarBtn.textContent = 'Toggle Sidebar';
     toggleSidebarBtn.style.position = 'fixed';
@@ -182,21 +183,14 @@ function extractAndStoreLinks() {
     // Insert the button before the element with ID 'cb_p6_patreon_button'
     const patreonButton = document.getElementById('cb_p6_patreon_button');
     patreonButton.parentNode.insertBefore(toggleSidebarBtn, patreonButton);
-})();
 
+    // Add styles
     GM_addStyle(`
-        /* Your existing styles for the sidebar */
-        #sidebarContainer {
-            /* Your sidebar styles */
-            display: block; /* Make sure sidebar is initially visible */
-        }
-
-          /* Media query for mobile devices */
+        /* Media query for mobile devices */
         @media only screen and (max-width: 768px) {
             #sidebarContainer {
                 display: none !important; /* Hide the sidebar on smaller screens */
             }
-        }
 
             /* Styles for the button on mobile */
             #toggleSidebarBtn {
