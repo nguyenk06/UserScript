@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MartialPeak Monogatariscansmtl
 // @namespace    http://tampermonkey.net/
-// @version      1.35
+// @version      1.4
 // @description  Monogatariscansmtl Page turner
 // @author       You
 // @match        https://www.monogatariscansmtl.com/post/*
@@ -119,7 +119,7 @@ function updateLatestChapter() {
     // Add text to the anchor elements
     nextElement.textContent = "Next";
     prevElement.textContent = "Prev";
-    latestElement.textContent = "Last Read " +getLatestChapter() ;
+    latestElement.textContent = getLatestChapter();
 
     // Apply CSS styles to the anchor elements
     nextElement.style.position = "fixed";
