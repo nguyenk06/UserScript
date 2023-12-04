@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      1.05
+// @version      1.06
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -71,9 +71,6 @@ function extractAndStoreLinks() {
     const storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks')) || [];
     const newLinks = [];
 
-    // Your logic to extract new links from the table of contents page
-    // ...
-
     // Example: Adding new links to stored links without overwriting existing ones
     newLinks.forEach((newLink) => {
         const existingLink = storedLinks.find(link => link.href === newLink.href);
@@ -86,6 +83,7 @@ function extractAndStoreLinks() {
 }
     function createSidebar(links) {
         const sidebarContainer = document.createElement('div');
+        sidebarContainer.id = "sidebarContainer";
         sidebarContainer.style.cssText = `
             position: fixed;
             top: 0;
@@ -184,6 +182,12 @@ document.body.insertBefore(toggleSidebarBtn, document.body.firstChild);
 
     // Add styles
     GM_addStyle(`
+    
+    .visited-link {
+        color: blue !important;
+        text-decoration: line-through !important;
+    }
+
         /* Media query for mobile devices */
         @media only screen and (max-width: 768px) {
             #sidebarContainer {
