@@ -11,6 +11,40 @@
 (function() {
     'use strict';
 
+  
+    // Function to perform an HTTP GET request using XMLHttpRequest
+    function fetchScript(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                callback(xhr.responseText);
+            }
+        };
+        xhr.send();
+    }
+
+    // Check for script updates
+    function checkForUpdate() {
+        const scriptUrl = 'https://github.com/nguyenk06/UserScript/raw/main/World%20of%20Creation%20Sidebar%20Dreams%20of%20Jianghu.user.js';
+
+        fetchScript(scriptUrl, function(remoteScript) {
+            // Extract the version from the remote script
+            const remoteVersion = remoteScript.match(/@version\s+([0-9.]+)/i)[1];
+
+            if (remoteVersion && remoteVersion !== GM_info.script.version) {
+                if (confirm('A new version is available. Update now?')) {
+                    // Redirect to the update URL
+                    window.location.href = scriptUrl;
+                }
+            }
+        });
+    }
+	
+	// Run checkupdate
+	checkForUpdate();
+
+
 function extractAndStoreLinks() {
     const storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks')) || [];
     const newLinks = [];

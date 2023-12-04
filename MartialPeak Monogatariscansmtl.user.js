@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.4
 // @description  Monogatariscansmtl Page turner
-// @author       You
+// @author       Znesfreak
 // @match        https://www.monogatariscansmtl.com/post/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=monogatariscansmtl.com
 // @grant        none
