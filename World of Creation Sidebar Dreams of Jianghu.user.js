@@ -63,6 +63,7 @@ function extractAndStoreLinks() {
 }
     function createSidebar(links) {
         const sidebarContainer = document.createElement('div');
+		sidebarContainer.id = 'sidebarContainer';
         sidebarContainer.style.cssText = `
             position: fixed;
             top: 0;
