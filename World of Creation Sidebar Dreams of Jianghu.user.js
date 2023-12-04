@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      1.02
+// @version      1.03
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -159,11 +159,12 @@ function extractAndStoreLinks() {
             display: block; /* Make sure sidebar is initially visible */
         }
 
-        /* Media query for mobile devices */
+          /* Media query for mobile devices */
         @media only screen and (max-width: 768px) {
             #sidebarContainer {
-                display: none; /* Hide the sidebar on smaller screens */
+                display: none !important; /* Hide the sidebar on smaller screens */
             }
+        }
 
             /* Styles for the button on mobile */
             #toggleSidebarBtn {
