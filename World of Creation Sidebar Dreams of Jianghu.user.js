@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      1
+// @version      1.01
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -119,6 +119,14 @@ function extractAndStoreLinks() {
             localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
         }
     }
+ function toggleSidebar() {
+        const sidebar = document.getElementById('sidebarContainer');
+        if (sidebar.style.display === 'none' || sidebar.style.display === '') {
+            sidebar.style.display = 'block';
+        } else {
+            sidebar.style.display = 'none';
+        }
+    }
 
     const url = window.location.href;
     if (url === 'https://dreamsofjianghu.ca/%e4%bf%ae%e7%9c%9f%e4%b8%96%e7%95%8c-world-of-cultivation/table-of-contents/') {
@@ -138,10 +146,39 @@ function extractAndStoreLinks() {
         };
     }
 
+    // Add button to toggle sidebar visibility on mobile
+    const toggleSidebarBtn = document.createElement('button');
+    toggleSidebarBtn.textContent = 'Toggle Sidebar';
+    toggleSidebarBtn.id = 'toggleSidebarBtn';
+    toggleSidebarBtn.style.display = 'none'; // Hide button by default
+
+    toggleSidebarBtn.addEventListener('click', toggleSidebar);
+
+    // Append the button to the body
+    document.body.appendChild(toggleSidebarBtn);
+
     GM_addStyle(`
-        .visited-link {
-            color: blue !important;
-            text-decoration: line-through !important;
+        /* Your existing styles for the sidebar */
+        #sidebarContainer {
+            /* Your sidebar styles */
+            display: block; /* Make sure sidebar is initially visible */
+        }
+
+        /* Media query for mobile devices */
+        @media only screen and (max-width: 768px) {
+            #sidebarContainer {
+                display: none; /* Hide the sidebar on smaller screens */
+            }
+
+            /* Styles for the button on mobile */
+            #toggleSidebarBtn {
+                display: block; /* Show the toggle button */
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                z-index: 9999;
+                /* Additional styles for the button */
+            }
         }
     `);
 })();
