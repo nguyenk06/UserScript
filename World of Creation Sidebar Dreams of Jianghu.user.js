@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      2
+// @version      2.1
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -139,14 +139,20 @@ function extractAndStoreLinks() {
             localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
         }
     }
-	  // Function to perform toggle sidebar
-    function toggleSidebar() {
+	 // Function to perform toggle sidebar
+     function toggleSidebar() {
         const sidebar = document.getElementById('sidebarContainer');
         if (sidebar.style.display === 'none' || sidebar.style.display === '') {
             sidebar.style.display = 'block';
         } else {
             sidebar.style.display = 'none';
         }
+    }
+
+    function addCustomStyle(css) {
+        const style = document.createElement('style');
+        style.textContent = css;
+        document.head.appendChild(style);
     }
 
     const url = window.location.href;
@@ -166,27 +172,26 @@ function extractAndStoreLinks() {
             }
         };
     }
-     
+
     // Create a toggle button
-const toggleSidebarBtn = document.createElement('button');
-toggleSidebarBtn.textContent = 'Toggle Sidebar';
-toggleSidebarBtn.style.position = 'fixed';
-toggleSidebarBtn.style.top = '20px'; // Adjust the top position
-toggleSidebarBtn.style.left = '200px'; // Adjust the left position
+    const toggleSidebarBtn = document.createElement('button');
+    toggleSidebarBtn.textContent = 'Toggle Sidebar';
+    toggleSidebarBtn.style.position = 'fixed';
+    toggleSidebarBtn.style.top = '20px'; // Adjust the top position
+    toggleSidebarBtn.style.left = '200px'; // Adjust the left position
 
-// Attach toggle functionality to the button
-toggleSidebarBtn.addEventListener('click', toggleSidebar);
+    // Attach toggle functionality to the button
+    toggleSidebarBtn.addEventListener('click', toggleSidebar);
 
-// Insert the button at the top of the body
-document.body.insertBefore(toggleSidebarBtn, document.body.firstChild);
+    // Insert the button at the top of the body
+    document.body.insertBefore(toggleSidebarBtn, document.body.firstChild);
 
     // Add styles
-    GM_addStyle(`
-    
-    .visited-link {
-        color: blue !important;
-        text-decoration: line-through !important;
-    }
+    addCustomStyle(`
+        .visited-link {
+            color: blue !important;
+            text-decoration: line-through !important;
+        }
 
         /* Media query for mobile devices */
         @media only screen and (max-width: 768px) {
