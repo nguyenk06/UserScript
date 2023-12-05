@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      2.1
+// @version      2.2
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -67,20 +67,30 @@ function checkForUpdate() {
   // Run checkupdate
     checkForUpdate();
 
-function extractAndStoreLinks() {
-    const storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks')) || [];
-    const newLinks = [];
-
-    // Example: Adding new links to stored links without overwriting existing ones
-    newLinks.forEach((newLink) => {
-        const existingLink = storedLinks.find(link => link.href === newLink.href);
-        if (!existingLink) {
-            storedLinks.push({ ...newLink, visited: false }); // Append new links
+    function extractAndStoreLinks() {
+        let storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks'));
+    
+        // Check if storedLinks is null, undefined, or an empty array, and initialize it with extracted links if needed
+        if (!storedLinks || !Array.isArray(storedLinks) || storedLinks.length === 0) {
+            storedLinks = [];
+            const linkElements = document.querySelectorAll('a');
+    
+            linkElements.forEach((linkElement) => {
+                const href = linkElement.href;
+                const text = linkElement.textContent.trim();
+    
+                if (/\bChapter\b/i.test(href)) {
+                    storedLinks.push({ href, text, visited: false });
+                }
+            });
+    
+            // Set the localStorage item if links were found
+            if (storedLinks.length > 0) {
+                localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
+            }
         }
-    });
-
-    localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
-}
+    }
+    
     function createSidebar(links) {
         const sidebarContainer = document.createElement('div');
         sidebarContainer.id = "sidebarContainer";
