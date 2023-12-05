@@ -8,44 +8,30 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 
-// Function to perform an HTTP GET request using XMLHttpRequest
-function fetchScript(url, callback, errorCallback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                callback(xhr.responseText);
-            } else {
-                // Call the error callback function if provided
-                if (errorCallback && typeof errorCallback === 'function') {
-                    errorCallback(xhr.statusText);
-                }
+// Function to perform an HTTP GET request using fetch API
+function fetchScript(url) {
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
             }
-        }
-    };
-    xhr.onerror = function() {
-        // Call the error callback function if provided
-        if (errorCallback && typeof errorCallback === 'function') {
-            errorCallback('Network Error');
-        }
-    };
-    xhr.send();
+            return response.text();
+        });
 }
 
 function checkForUpdate() {
     const scriptUrl = 'https://github.com/nguyenk06/UserScript/raw/main/World%20of%20Creation%20Sidebar%20Dreams%20of%20Jianghu.user.js';
 
-    fetchScript(
-        scriptUrl,
-        function(remoteScript) {
+    fetchScript(scriptUrl)
+        .then(remoteScript => {
             try {
                 // Extract the version from the remote script
                 const remoteVersion = remoteScript.match(/@version\s+([0-9.]+)/i)[1];
 
-                if (remoteVersion && remoteVersion !== GM_info.script.version) {
+                // Detect the userscript manager and handle updates accordingly
+                if (typeof GM_info !== 'undefined' && GM_info.script.version !== remoteVersion) {
                     if (confirm('A new version is available. Update now?')) {
-                        // Redirect to the update URL
+                        // Redirect to the update URL for Tampermonkey
                         window.location.href = scriptUrl;
                     }
                 } else {
@@ -54,12 +40,12 @@ function checkForUpdate() {
             } catch (error) {
                 console.error('Error processing script update:', error);
             }
-        },
-        function(error) {
+        })
+        .catch(error => {
             console.error('Error fetching remote script:', error);
-        }
-    );
+        });
 }
+
 
 (function() {
     'use strict';
@@ -154,6 +140,11 @@ function checkForUpdate() {
         const sidebar = document.getElementById('sidebarContainer');
         if (sidebar.style.display === 'none' || sidebar.style.display === '') {
             sidebar.style.display = 'block';
+            const visitedLinks = document.querySelectorAll('.visited-link');
+            if (visitedLinks && visitedLinks.length > 0) {
+                const lastVisitedLink = visitedLinks[visitedLinks.length - 1];
+                lastVisitedLink.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         } else {
             sidebar.style.display = 'none';
         }
@@ -185,6 +176,7 @@ function checkForUpdate() {
 
     // Create a toggle button
     const toggleSidebarBtn = document.createElement('button');
+    toggleSidebarBtn.id = 'toggleBtn';
     toggleSidebarBtn.textContent = 'Toggle Sidebar';
     toggleSidebarBtn.style.position = 'fixed';
     toggleSidebarBtn.style.top = '20px'; // Adjust the top position
@@ -195,6 +187,23 @@ function checkForUpdate() {
 
     // Insert the button at the top of the body
     document.body.insertBefore(toggleSidebarBtn, document.body.firstChild);
+
+    // Add styles
+    const styles = `
+        /* Additional styles for the button */
+        #toggleBtn {
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+    `;
+
+    const styleSheet = document.createElement('style');
+    styleSheet.type = 'text/css';
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
 
     // Add styles
     addCustomStyle(`
