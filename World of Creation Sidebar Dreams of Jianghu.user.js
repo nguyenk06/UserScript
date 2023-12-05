@@ -190,9 +190,9 @@ document.body.insertBefore(toggleSidebarBtn, document.body.firstChild);
 
         /* Media query for mobile devices */
         @media only screen and (max-width: 768px) {
-           /* #sidebarContainer {
-                display: none; /* Hide the sidebar on smaller screens 
-            }*/
+            #sidebarContainer {
+                display: none; /* Hide the sidebar on smaller screens */
+            }
 
             /* Styles for the button on mobile */
             #toggleSidebarBtn {
