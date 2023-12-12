@@ -7,7 +7,7 @@
 // @match        https://dreamsofjianghu.ca/*
 // @grant        GM_addStyle
 // ==/UserScript==
-
+/*
 // Function to perform an HTTP GET request using fetch API
 function fetchScript(url) {
     return fetch(url)
@@ -46,13 +46,13 @@ function checkForUpdate() {
             console.error('Error fetching remote script:', error);
         });
 }
-
+*/
 
 (function() {
     'use strict';
 
   // Run checkupdate
-    checkForUpdate();
+  //  checkForUpdate();
 
    function extractAndStoreLinks() {
     let storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks'));
