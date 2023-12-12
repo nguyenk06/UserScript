@@ -20,7 +20,7 @@ function fetchScript(url) {
 }
 
 function checkForUpdate() {
-    const scriptUrl = 'https://github.com/nguyenk06/UserScript/raw/main/World%20of%20Creation%20Sidebar%20Dreams%20of%20Jianghu.user.js';
+    const scriptUrl = 'https://github.com/nguyenk06/UserScript/blob/6e097b37215189a4ec2e97a7d78d4c5acc8ab533/World%20of%20Creation%20Sidebar%20Dreams%20of%20Jianghu.user.js';
 
     fetchScript(scriptUrl)
         .then(remoteScript => {
