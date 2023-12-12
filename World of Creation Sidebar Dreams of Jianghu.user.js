@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      2.3
+// @version      2.4
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -30,6 +30,7 @@ function checkForUpdate() {
 
                 // Detect the userscript manager and handle updates accordingly
                 if (typeof GM_info !== 'undefined' && GM_info.script.version !== remoteVersion) {
+                    localStorage.removeItem('dreamsOfJianghuLinks');
                     if (confirm('A new version is available. Update now?')) {
                         // Redirect to the update URL for Tampermonkey
                         window.location.href = scriptUrl;
@@ -53,29 +54,148 @@ function checkForUpdate() {
   // Run checkupdate
     checkForUpdate();
 
-    function extractAndStoreLinks() {
-        let storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks'));
-    
-        // Check if storedLinks is null, undefined, or an empty array, and initialize it with extracted links if needed
-        if (!storedLinks || !Array.isArray(storedLinks) || storedLinks.length === 0) {
-            storedLinks = [];
-            const linkElements = document.querySelectorAll('a');
-    
+   function extractAndStoreLinks() {
+    let storedLinks = JSON.parse(localStorage.getItem('dreamsOfJianghuLinks'));
+
+
+    // Check if storedLinks is null, undefined, or an empty array, and initialize it with extracted links if needed
+    if (!storedLinks || !Array.isArray(storedLinks) || storedLinks.length === 0) {
+        storedLinks = [];
+
+        let checkforHref =false;
+        let skipLinks = false;
+        let chapterLog = 1;
+
+        const entryContentDivs = document.querySelectorAll('div.entry-content');
+        entryContentDivs.forEach(entryContentDiv => {
+            const linkElements = entryContentDiv.querySelectorAll('a');
             linkElements.forEach((linkElement) => {
                 const href = linkElement.href;
                 const text = linkElement.textContent.trim();
-    
+
+                //Skip dupes
+                if (storedLinks.some(link => link.href === href)) {
+                    return;
+                }
+                //last chapter
+                if(chapterLog >= 915)
+                    return;
+
+
+                if(skipLinks || text == 'Chapter One “[Little Art of Cloud and Rain]”')
+                {
+                    skipLinks = true;
+                    if(text == 'Chapter Twenty Six “Appearance Changed and Mind Erased”')
+                    {
+                        chapterLog =26
+                       skipLinks = false;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                if(text == 'Chapter Forty Eight “The Black-Hearted Records Room”')
+                {
+                    checkforHref = true;
+                }
+                if(checkforHref)
+                {
+                    var numericPart = '';
+                    numericPart = extractNumberFromHref(href);
+                    switch(numericPart)
+                    {
+                        case null:
+                            if(text == 'Chapter One Hundred and Five “Mo Matrix and Yao Seed”')
+                                numericPart = 105;
+                            if(text == 'Chapter Three Hundred and Thirty Seven “Crimson Fiend Cauldron”')
+                               numericPart = 337;
+                            if(text == 'Chapter Four Hundred and Twelve “Collide”')
+                               numericPart = 412;
+                            if(text =='Chapter Five Hundred and Sixty Seven “The Seeds Sprouting”')
+                                numericPart = 567;
+                            if(text =='Chapter Five Hundred and Eighty Four “Low Opinion”')
+                               numericPart = 584;
+                            if(text == 'Chapter Six Hundred and Thirteen “Conspiracy”')
+                                numericPart = 613;
+                            if(text.includes('Six Hundred and Fifty Four'))
+                                numericPart = 654;
+                            if(text =='Chapter Six Hundred and Ninety Four “Weapon Layering Craftsmanship”')
+                                numericPart = 694;
+                            if(text.includes('Seven Hundred and Five'))
+                                numericPart = 705;
+                            break;
+                        case 94:
+                            if(text == 'Chapter Ninety Three “Stalagmite Fire”')
+                                numericPart = 93;
+                            break;
+                        case 289:
+                            if(text == 'Chapter Two Hundred and Sixty Eight “Nine Turn Sky Soil Disk”')
+                                numericPart = 268;
+                            break;
+                        case 337:
+                            if(text =='Chapter Three Hundred and Seventy Seven “Qinghua Xue”')
+                                numericPart = 377;
+                            break;
+                        case 341:
+                            if(text == 'Chapter Three Hundred and Forty  “Nan Yue’s Little Yao Arts”')
+                                numericPart = 342;
+                            break;
+                        case 437:
+                            if(text == 'Chapter Four Hundred and Thirty Seven “Zuo Mo’s Sneak Attack” Part Two')
+                                chapterLog = 437;
+                            break;
+                        case 525:
+                            if(text =='Chapter Four Hundred and Twenty Five “Super Monster Ship!”')
+                                numericPart = 425;
+                            break;
+                        case 616:
+                            if(text.includes('Six Hundred and Fifteen'))
+                                numericPart = 615;
+                            break;
+
+                    }
+                    if(numericPart != chapterLog)
+                    {
+                        console.log("Last Chapter logged: " + chapterLog + "Gap = " + numericPart +" " + text);
+                        chapterLog = numericPart;
+                    }
+
+                }
+
                 if (/\bChapter\b/i.test(href)) {
                     storedLinks.push({ href, text, visited: false });
+                    if(chapterLog >= 26)
+                        chapterLog++;
                 }
+                else if (/\bChaper\b/i.test(href)) {
+                    storedLinks.push({ href, text, visited: false });
+                    if(chapterLog >= 26)
+                        chapterLog++;
+                }
+                else if (/\bworld-of-cultivation\b/i.test(href)){
+                    storedLinks.push({ href, text, visited: false });
+                    if(chapterLog >= 26)
+                        chapterLog++;
+                }
+
             });
-    
-            // Set the localStorage item if links were found
-            if (storedLinks.length > 0) {
-                localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
-            }
+        });
+
+        // Set the localStorage item if links were found
+        if (storedLinks.length > 0) {
+            localStorage.setItem('dreamsOfJianghuLinks', JSON.stringify(storedLinks));
         }
     }
+}
+
+function extractNumberFromHref(href) {
+  const match = href.match(/r-(\d+)|n-(\d+)/i);
+  const chapterNumber = match ? (match[1] || match[2]) : null;
+  return chapterNumber ? parseInt(chapterNumber, 10) : null;
+}
+
     
     function createSidebar(links) {
         const sidebarContainer = document.createElement('div');
@@ -91,7 +211,15 @@ function checkForUpdate() {
             padding-top: 50px;
             z-index: 9999;
         `;
+/*
+        const resetSidebarBtn = document.createElement('button');
+    resetSidebarBtn.id = 'toggleBtn';
+    resetSidebarBtn.textContent = 'Reset TOC';
 
+    // Attach toggle functionality to the button
+    resetSidebarBtn.addEventListener('click', resetBtn);
+        sidebarContainer.appendChild(resetSidebarBtn);
+*/
         const tocLink = document.createElement('div');
         tocLink.innerHTML = `<a href="https://dreamsofjianghu.ca/%e4%bf%ae%e7%9c%9f%e4%b8%96%e7%95%8c-world-of-cultivation/table-of-contents/" target="_self">Table of Contents</a>`;
         tocLink.style.padding = '10px';
@@ -126,6 +254,11 @@ function checkForUpdate() {
         });
 
         document.body.appendChild(sidebarContainer);
+    }
+
+    function resetBtn(){
+        localStorage.removeItem('dreamsOfJianghuLinks');
+        window.location.reload();
     }
 
     function markAsVisited(index) {
