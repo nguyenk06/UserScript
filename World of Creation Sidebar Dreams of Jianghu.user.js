@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         World of Creation Sidebar Dreams of Jianghu
 // @namespace    http://tampermonkey.net/
-// @version      2.4
+// @version      2.45
 // @description  World of Creation TOC sidebar
 // @author       Znesfreak
 // @match        https://dreamsofjianghu.ca/*
@@ -211,7 +211,7 @@ function extractNumberFromHref(href) {
             padding-top: 50px;
             z-index: 9999;
         `;
-/*
+
         const resetSidebarBtn = document.createElement('button');
     resetSidebarBtn.id = 'toggleBtn';
     resetSidebarBtn.textContent = 'Reset TOC';
@@ -219,7 +219,7 @@ function extractNumberFromHref(href) {
     // Attach toggle functionality to the button
     resetSidebarBtn.addEventListener('click', resetBtn);
         sidebarContainer.appendChild(resetSidebarBtn);
-*/
+
         const tocLink = document.createElement('div');
         tocLink.innerHTML = `<a href="https://dreamsofjianghu.ca/%e4%bf%ae%e7%9c%9f%e4%b8%96%e7%95%8c-world-of-cultivation/table-of-contents/" target="_self">Table of Contents</a>`;
         tocLink.style.padding = '10px';
